@@ -132,9 +132,6 @@ class PPO(object):
         with tf.GradientTape() as tape:
             mean, std = self.actor(state), tf.exp(self.actor.logstd)
             pi = tfp.distributions.Normal(mean, std)
-            # print("train_action:",action)
-            # print("train_action_shape:", action.shape)  # (32,2)
-            # print("~~~~~~", pi.log_prob(action))  # tf.Tensor(shape=(32, 2))
             ratio = tf.exp(pi.log_prob(action) - old_pi.log_prob(action))
             # print("ratio:", ratio)  # tf.Tensor(shape=(32,2))
             surr = ratio * adv
@@ -166,18 +163,8 @@ class PPO(object):
             all_act = self.actor(state)
             # print("all_act:", all_act)
             pi = tfp.distributions.Categorical(logits=all_act)
-            # print("pi:", pi)
-            # print("train_action:",action)
-            # print("train_action_shape:", action.shape)  # (32,1)
             action = action.squeeze()
-            # print("action.squeeze", action.shape)  # (32, )
-            # print("~~~~~~", pi.log_prob(action))  # tf.Tensor(shape=(32,))
-            # reshape = tf.reshape(pi.log_prob(action), [action.shape[0], -1])  # tf.Tensor(shape=(32,))
-            # print("reshape:", reshape)
-            # ratio = tf.exp(pi.log_prob(action) - old_pi.log_prob(action))
             ratio = tf.exp(tf.reshape(pi.log_prob(action), [action.shape[0], -1]) - tf.reshape(old_pi.log_prob(action), [action.shape[0], -1]))
-            # ratio = tf.exp(pi.log_prob(all_act) - old_pi.log_prob(all_act))
-            # print("ratio:", ratio)   # tf.Tensor(shape=(32,1))
             surr = ratio * adv
             if self.method == 'penalty':  # ppo penalty
                 kl = tfp.distributions.kl_divergence(old_pi, pi)
@@ -269,9 +256,6 @@ class PPO(object):
             if greedy:
                 return np.argmax(probs.ravel())
             else:
-                # choose_act = tl.rein.choice_action_by_probs(probs.ravel())
-                # return_act = np.array([choose_act])
-                # print("return_act:", return_act)
                 pi = tfp.distributions.Categorical(probs.squeeze())
                 # print("pi:", pi)  # pi: tfp.distributions.Categorical("Categorical", batch_shape=[], event_shape=[], dtype=int32)
                 action = tf.squeeze(pi.sample(1), axis=0)

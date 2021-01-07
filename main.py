@@ -9,13 +9,13 @@ from PPO import PPO
 from unity_wrapper_zzy import UnityWrapper
 
 parser = argparse.ArgumentParser(description='Train or test neural net motor controller.')
-parser.add_argument('--train', dest='train', action='store_true', default=True)
-parser.add_argument('--test', dest='test', action='store_true', default=False)
+parser.add_argument('--train', dest='train', action='store_true', default=False)
+parser.add_argument('--test', dest='test', action='store_true', default=True)
 args = parser.parse_args()
 
 #####################  hyper parameters  ####################
 
-ENV_ID = 'CarVerification-2'  # environment id
+ENV_ID = 'CarVerification-1'  # environment id
 RANDOM_SEED = 1  # random seed
 RENDER = True  # render while training
 
