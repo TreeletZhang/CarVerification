@@ -36,8 +36,8 @@ TRAIN_EPISODES = 3000  # total number of episodes for training
 TEST_EPISODES = 10  # total number of episodes for testing
 MAX_STEPS = 200  # total number of steps for each episode
 GAMMA = 0.9  # reward discount
-LR_A = 0.000008  # learning rate for actor0.00001
-LR_C = 0.00008  # learning rate for critic0.0005
+LR_A = 0.00001  # learning rate for actor0.00001
+LR_C = 0.00002  # learning rate for critic0.0005
 BATCH_SIZE = 32  # update batch size
 ACTOR_UPDATE_STEPS = 10  # actor update steps
 CRITIC_UPDATE_STEPS = 10  # critic update steps
@@ -63,7 +63,7 @@ class PPO(object):
             if len(state_dim) >= 3:  # 图像输入
                 visual_inputs = tl.layers.Input([None, *state_dim], tf.float32, 'state')
                 visual_embedding1 = tl.layers.Conv2dLayer(shape=(3, 3, 3, 32), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_1')(visual_inputs)
-                visual_embedding2 = tl.layers.Conv2dLayer(shape=(5, 5, 32, 64), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_2')(visual_embedding1)
+                visual_embedding2 = tl.layers.Conv2dLayer(shape=(3, 3, 32, 64), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_2')(visual_embedding1)
                 # shape设置卷积核的形状，前两维是filter的大小，第三维表示前一层的通道数，也即每个filter的通道数，第四维表示filter的数量
                 inputs = tl.layers.Flatten()(visual_embedding2)
                 layer = tl.layers.Dense(64, tf.nn.relu)(inputs)
@@ -84,7 +84,7 @@ class PPO(object):
             if len(state_dim) >= 3:  # 图像输入
                 visual_inputs = tl.layers.Input([None, *state_dim], tf.float32, 'state')
                 visual_embedding1 = tl.layers.Conv2dLayer(shape=(3, 3, 3, 32), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_1')(visual_inputs)
-                visual_embedding2 = tl.layers.Conv2dLayer(shape=(5, 5, 32, 64), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_2')(visual_embedding1)
+                visual_embedding2 = tl.layers.Conv2dLayer(shape=(3, 3, 32, 64), strides=(1, 1, 1, 1), act=tf.nn.relu, name='conv2d_2')(visual_embedding1)
                 # shape设置卷积核的形状，前两维是filter的大小，第三维表示前一层的通道数，也即每个filter的通道数，第四维表示filter的数量
                 inputs = tl.layers.Flatten()(visual_embedding2)
             else:  # 向量输入

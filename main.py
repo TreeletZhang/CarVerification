@@ -9,13 +9,13 @@ from PPO import PPO
 from unity_wrapper_zzy import UnityWrapper
 
 parser = argparse.ArgumentParser(description='Train or test neural net motor controller.')
-parser.add_argument('--train', dest='train', action='store_true', default=False)
-parser.add_argument('--test', dest='test', action='store_true', default=True)
+parser.add_argument('--train', dest='train', action='store_true', default=True)
+parser.add_argument('--test', dest='test', action='store_true', default=False)
 args = parser.parse_args()
 
 #####################  hyper parameters  ####################
 
-ENV_ID = 'CarVerification-1'  # environment id
+ENV_ID = 'CarVerification-2'  # environment id
 RANDOM_SEED = 1  # random seed
 RENDER = True  # render while training
 
@@ -23,19 +23,19 @@ ALG_NAME = 'PPO'
 TRAIN_EPISODES = 3000  # total number of episodes for training
 TEST_EPISODES = 10  # total number of episodes for testing
 MAX_STEPS = 200  # total number of steps for each episode
-GAMMA = 0.9  # reward discount
-LR_A = 0.000008  # learning rate for actor0.00001
-LR_C = 0.00008  # learning rate for critic0.0005
+# GAMMA = 0.9  # reward discount
+# LR_A = 0.00001  # learning rate for actor0.00001
+# LR_C = 0.00002  # learning rate for critic0.0005
 BATCH_SIZE = 32  # update batch size
-ACTOR_UPDATE_STEPS = 10  # actor update steps
-CRITIC_UPDATE_STEPS = 10  # critic update steps
-
-# ppo-penalty parameters
-KL_TARGET = 0.01
-LAM = 0.5
-
-# ppo-clip parameters
-EPSILON = 0.2
+# ACTOR_UPDATE_STEPS = 10  # actor update steps
+# CRITIC_UPDATE_STEPS = 10  # critic update steps
+#
+# # ppo-penalty parameters
+# KL_TARGET = 0.01
+# LAM = 0.5
+#
+# # ppo-clip parameters
+# EPSILON = 0.2
 
 LogDir = os.path.join("logs/"+ENV_ID)
 
@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
             with summary_writer.as_default():  # 希望使用的记录器
                 tf.summary.scalar('reward', episode_reward, step=episode)
-        agent.save()
+        agent.save(ALG_NAME, ENV_ID)
 
         plt.plot(all_episode_reward)
         if not os.path.exists('image'):
