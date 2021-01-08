@@ -3,3 +3,4 @@ This project use PPO algorithm(based on TensorLayer) and Unity environment(ml-ag
 ## Features
 * Based on Tensorlayer tutorial_PPO.py, add visual input
 * Based on Tensorlayer tutorial_PPO.py, add discrete action
+
